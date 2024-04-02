@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/wikidemo
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #     show_sql: true
+        format_sql: true
+#  data:
+#    web:
+#      pageable:
+#        default-page-size: 8
+#        max-page-size: 100
+#        one-indexed-parameters: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sm1108shin@knu.ac.kr
+    password: bsjpedsgnxjtybpg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+    auth-code-expiration-millis: 1800000 //30분
+  redis:
+    host: localhost
+    port: 6379
+
+
+jwt:
+  header: Authorization
+  secret: U3ByaW5nLUJvb3QtQmFja2VuZC1Qcm9qZWN0LVJlZmFjdG9yaW5nLUFuZC1TdHVkeS1Gcm9tLUFuYWNvbmRhCg==
+  token-validity-in-seconds: 86400
+#trace < debug < info < warn < error
+logging.level:
+  org.hibernate.SQL: debug
+#  org.hibernate.type: trace

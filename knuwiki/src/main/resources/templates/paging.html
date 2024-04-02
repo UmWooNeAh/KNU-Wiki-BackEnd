@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+ <html xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorate="~{layout/default}">
+ <head>
+     <meta charset="UTF-8">
+     <title>Paging 처리 페이지</title>
+ </head>
+<body>
+<div class="container" layout:fragment="content">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="col-md-1">제목</th>
+            <th class="col-md-1">작성자</th>
+            <th class="col-md-1">본문</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doc : ${documents}">
+            <td th:text="${doc.documentName}"></a></td>
+            <td th:text="${doc.memberName}"></td>
+            <td th:text="${doc.texts}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!documents.isEmpty()}">
+        <ul class="pagination"
+            th:with="
+                pageNumber = ${pagingInfo.currentPage},
+                pageSize = ${pagingInfo.docsPerPage},
+                totalPages = ${pagingInfo.totalPages},
+                startPage = ${pagingInfo.startPage},
+                endPage = ${pagingInfo.endPage}">
+
+            <li th:classappend="${pageNumber}==1 ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="${pageNumber}==1 ? '#' : @{list(page=${pageNumber - 1})}">
+                    <span aria-hidden="true">&lt</span>
+                </a>
+            </li>
+
+            <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{list(page=${page})}"></a>
+            </li>
+
+            <li th:classappend="${pageNumber}==${totalPages} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="${pageNumber}==${totalPages} ? '#' : @{list(page=${pageNumber + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&gt</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        /*]]>*/
+    </script>
+</div>
+</body>
+</html>
