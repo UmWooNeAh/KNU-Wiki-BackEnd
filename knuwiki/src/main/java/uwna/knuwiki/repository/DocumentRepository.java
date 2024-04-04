@@ -19,9 +19,9 @@ import uwna.knuwiki.paging.QPagingDto;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static uwna.knuwiki.entity.QDocument.document;
+import static uwna.knuwiki.entity.QContent.*;
+import static uwna.knuwiki.entity.QDocument.*;
 
 
 @Repository
@@ -38,16 +38,17 @@ public class DocumentRepository {
 
     public Integer getDocCounts(String search) {
         return Optional.ofNullable(queryFactory
-                .select(document.count())
-                .from(document)
-                .where(document.name.contains(search))
+                .select(content.count())
+                .from(content)
+                .join(content.document, document)
+                .where(content.name.contains(search).and(content.version.eq(document.nowVersion)))
                 .fetchOne()).orElse(0L).intValue();
 
     }
 
     public Page<PagingDto> findCurrentPageDocs(ArticlePage paging, Pageable pageable) {
         List<PagingDto> content = queryFactory
-                .select(new QPagingDto(document.name,
+                .select(new QPagingDto(QContent.content.name,
                         QContent.content.createdMember.username,
                         QContent.content.texts
                 ))
@@ -62,9 +63,9 @@ public class DocumentRepository {
     }
 
     public Page<PagingDto> findAllDocs(ArticlePage paging, Pageable pageable) {
-        List<PagingDto> content = queryFactory
-                .select(new QPagingDto(document.name,
-                        QContent.content.createdMember.username,
+        List<PagingDto> contents = queryFactory
+                .select(new QPagingDto(content.name,
+                        content.createdMember.username,
                         QContent.content.texts
                 ))
                 .from(QContent.content)
@@ -72,7 +73,7 @@ public class DocumentRepository {
                 .where(QContent.content.createdMember.username.eq("userA"))
                 .fetch();
 
-        return new PageImpl<>(content, pageable, content.size());
+        return new PageImpl<>(contents, pageable, contents.size());
 
     }
 

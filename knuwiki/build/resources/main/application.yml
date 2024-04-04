@@ -2,10 +2,14 @@ spring:
   profiles:
     active: local
   datasource:
-    url: jdbc:h2:tcp://localhost/~/wikidemo
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:tcp://localhost/~/wikidemo
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/knu_wiki
+    username: conda
+    password: 2425
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -36,7 +40,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-
 
 jwt:
   header: Authorization

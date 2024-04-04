@@ -26,7 +26,9 @@ public class QDocument extends EntityPathBase<Document> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath name = createString("name");
+    public final StringPath nowVersion = createString("nowVersion");
+
+    public final StringPath type = createString("type");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;

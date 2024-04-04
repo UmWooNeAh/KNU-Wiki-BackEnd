@@ -33,9 +33,9 @@ public class QContent extends EntityPathBase<Content> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath texts = createString("texts");
+    public final StringPath name = createString("name");
 
-    public final StringPath undoVersion = createString("undoVersion");
+    public final StringPath texts = createString("texts");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;

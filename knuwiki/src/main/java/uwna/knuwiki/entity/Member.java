@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import uwna.knuwiki.controller.MemberJoinForm;
 
 @Entity
 @Getter
@@ -25,6 +26,10 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private State state;
 
+    public Member(MemberJoinForm joinForm) {
+        this.username = joinForm.getUsername();
+        this.password = joinForm.getPassword();
+    }
 
 
     public void setRole(Role role) {

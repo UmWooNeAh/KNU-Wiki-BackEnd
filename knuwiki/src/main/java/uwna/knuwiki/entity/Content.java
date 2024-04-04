@@ -25,8 +25,8 @@ public class Content extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")
     private Document document;
+    private String name;
     private String version;
-    private String undoVersion;
     @Transient
     private Long changeCounts;
     private String texts;

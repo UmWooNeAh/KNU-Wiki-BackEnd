@@ -19,6 +19,7 @@ public class Document extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
     private Long id;
-    private String name;
+    private String type;
+    private String nowVersion;
 
 }

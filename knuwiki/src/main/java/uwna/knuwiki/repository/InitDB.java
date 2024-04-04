@@ -36,8 +36,8 @@ public class InitDB {
                     , null, Role.ROLE_USER, State.정상);
 
             for (int i=1;i<=100;i++) {
-                Document doc = new Document(null, "문서 " + (i));
-                Content content = new Content(null, memberA, doc, "r1", null, null, i + "번째 문서의 본문입니다.");
+                Document doc = new Document(null, DocumentType.문서.toString(), "r1");
+                Content content = new Content(null, memberA, doc, i + " 번째 문서", "r1", null, i + "번째 문서의 본문입니다.");
                 em.persist(doc); em.persist(content);
             }
 

@@ -31,7 +31,7 @@ public class PagingController {
             ArticlePage paging = new ArticlePage(totalDocs, page, 8, 10);
             Page<PagingDto> documents = documentRepository.findCurrentPageDocs(paging, pageable);
 
-            log.info("현재 페이지 첫번째 문서={}", documents.stream().findFirst().get().getTexts());
+            //log.info("현재 페이지 첫번째 문서={}", documents.stream().findFirst().get().getTexts());
             model.addAttribute("pagingInfo", paging);
             model.addAttribute("documents", documents);
         }
