@@ -21,6 +21,9 @@ public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final TokenProvider tokenProvider;
 
+    //http request가 올때마다 항상 filter가 먼저 request를 가로채 정보를 검사한다.
+    //Authentication(인증): jwt에 정보를 기반으로 UserDetails와 비교 검증 수행,
+    // 검증이 완료되면 권한 등의 정보를 Authentication 객체에 담고 SecurityContext에 저장하고 다음 필터를 호출
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -43,7 +46,7 @@ public class JwtFilter extends GenericFilterBean {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
 
-            System.out.println("token : " + bearerToken);
+            //System.out.println("token : " + bearerToken);
 
             return bearerToken.substring(7);
         }

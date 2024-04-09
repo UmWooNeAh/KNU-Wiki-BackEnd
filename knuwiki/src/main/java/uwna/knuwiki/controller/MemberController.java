@@ -5,19 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import uwna.knuwiki.dto.LoginDto;
+import uwna.knuwiki.dto.MemberDto;
 import uwna.knuwiki.exception.LoginException;
 import uwna.knuwiki.exception.UserException;
 import uwna.knuwiki.auth.JwtFilter;
-import uwna.knuwiki.auth.TokenProvider;
-import uwna.knuwiki.dto.ErrorResponse;
-import uwna.knuwiki.dto.SuccessResponse;
-import uwna.knuwiki.entity.Member;
-import uwna.knuwiki.repository.MemberRepository;
+import uwna.knuwiki.response.ErrorResponse;
+import uwna.knuwiki.response.SuccessResponse;
 import uwna.knuwiki.service.MemberService;
 
 @RestController
@@ -28,10 +24,6 @@ public class MemberController {
 
     @Autowired
     private final MemberService memberService;
-    @Autowired
-    private final MemberRepository memberRepository;
-    @Autowired
-    private final TokenProvider tokenProvider;
     @Autowired
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -57,8 +49,7 @@ public class MemberController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/verify")
     public SuccessResponse sendVerifyMail(@RequestParam String username) {
-        Member findMember = memberService.getMemberByUsername(username);
-        memberService.sendVerificationEmail(findMember);
+        memberService.sendVerificationEmail(username);
         return new SuccessResponse(HttpStatus.CREATED.value(), "CREATED", "인증 메일을 전송하였습니다.");
     }
 
@@ -69,20 +60,31 @@ public class MemberController {
         return new SuccessResponse(HttpStatus.OK.value(), "OK", "유저 인증이 완료되었습니다.");
     }
 
-
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login")
     public SuccessResponse login(@RequestBody MemberJoinForm memberJoinForm) {
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(memberJoinForm.getUsername(), memberJoinForm.getPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication);
 
+//        //SecurityContext에 Member에 대한 인증 정보를 저장하는 과정, 추후 authorization 과정에 해당 정보를 이용하게 됨
+//        UsernamePasswordAuthenticationToken token =
+//                new UsernamePasswordAuthenticationToken(memberJoinForm.getUsername(), memberJoinForm.getPassword());
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(token);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String createdJwt = memberService.login(memberJoinForm);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + createdJwt);
 
-        return new SuccessResponse(HttpStatus.OK.value(), "ACCEPTED", jwt);
+        return new SuccessResponse(HttpStatus.OK.value(), "ACCEPTED", createdJwt);
+    }
+
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @GetMapping("/profile")
+    public MemberDto profile(@RequestHeader("Authorization") String jwt) {
+        //log.info("토큰: {}", jwt);
+        String memberId = memberService.getMemberIdFromJwt(jwt.substring("Bearer ".length()));
+        //log.info("가져온 member_id={}", memberId);
+
+        return memberService.getProfile(memberId);
     }
 
 }

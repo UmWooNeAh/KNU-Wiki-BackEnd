@@ -1,4 +1,4 @@
-package uwna.knuwiki.dto;
+package uwna.knuwiki.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

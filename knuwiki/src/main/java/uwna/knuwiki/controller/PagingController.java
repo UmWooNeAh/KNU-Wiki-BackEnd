@@ -14,6 +14,7 @@ import uwna.knuwiki.paging.PagingDto;
 import uwna.knuwiki.repository.DocumentRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -25,11 +26,12 @@ public class PagingController {
     private final DocumentRepository documentRepository;
 
     @GetMapping(value = "/paging/list")
-    public String getPages(@RequestParam(defaultValue="1") int page, Pageable pageable, Model model) {
-        Integer totalDocs = documentRepository.getDocCounts("문서");
+    public String getPages(@RequestParam(defaultValue="1") int page, Model model) {
+        Integer totalDocs = documentRepository.getDocCounts("버전");
+        log.info("총 문서수 = {}", totalDocs);
         if(totalDocs != 0) {
             ArticlePage paging = new ArticlePage(totalDocs, page, 8, 10);
-            Page<PagingDto> documents = documentRepository.findCurrentPageDocs(paging, pageable);
+            List<PagingDto> documents = documentRepository.findCurrentPageDocs(paging, "sm1108shin@knu.ac.kr");
 
             //log.info("현재 페이지 첫번째 문서={}", documents.stream().findFirst().get().getTexts());
             model.addAttribute("pagingInfo", paging);

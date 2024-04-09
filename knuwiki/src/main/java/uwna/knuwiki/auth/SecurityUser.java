@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import uwna.knuwiki.entity.Member;
 
 @Slf4j
-@Getter
-@Setter
+@Getter @Setter
 public class SecurityUser extends User {
 
     private Member member;

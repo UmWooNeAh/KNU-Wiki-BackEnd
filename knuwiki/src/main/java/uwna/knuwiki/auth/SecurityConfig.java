@@ -55,10 +55,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/auth/signup",
                         "/api/v1/auth/login",
                         "/api/v1/auth/verify/**",
-                        "/paging/list/**"
-                )
-                .permitAll() //회원가입/로그인은 별도 인증 없이 허가해줌
-                .requestMatchers("/api/v1/auth/profile").hasAnyRole("USER")
+                        "/paging/list/**",
+                        "/diff/**"
+                ).permitAll() //회원가입, 로그인 등 별도 인증 없이 허가해즐 url
+                .requestMatchers("/api/v1/auth/profile").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
         );
 

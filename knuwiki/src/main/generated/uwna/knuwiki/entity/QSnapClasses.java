@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QDocClasses is a Querydsl query type for DocClasses
+ * QSnapClasses is a Querydsl query type for SnapClasses
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QDocClasses extends EntityPathBase<DocClasses> {
+public class QSnapClasses extends EntityPathBase<SnapClasses> {
 
-    private static final long serialVersionUID = 766367028L;
+    private static final long serialVersionUID = 1981526L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QDocClasses docClasses = new QDocClasses("docClasses");
+    public static final QSnapClasses snapClasses = new QSnapClasses("snapClasses");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
@@ -29,33 +29,33 @@ public class QDocClasses extends EntityPathBase<DocClasses> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final QDocument document;
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final QSnapshot snapshot;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
 
-    public QDocClasses(String variable) {
-        this(DocClasses.class, forVariable(variable), INITS);
+    public QSnapClasses(String variable) {
+        this(SnapClasses.class, forVariable(variable), INITS);
     }
 
-    public QDocClasses(Path<? extends DocClasses> path) {
+    public QSnapClasses(Path<? extends SnapClasses> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QDocClasses(PathMetadata metadata) {
+    public QSnapClasses(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QDocClasses(PathMetadata metadata, PathInits inits) {
-        this(DocClasses.class, metadata, inits);
+    public QSnapClasses(PathMetadata metadata, PathInits inits) {
+        this(SnapClasses.class, metadata, inits);
     }
 
-    public QDocClasses(Class<? extends DocClasses> type, PathMetadata metadata, PathInits inits) {
+    public QSnapClasses(Class<? extends SnapClasses> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.classes = inits.isInitialized("classes") ? new QClassification(forProperty("classes"), inits.get("classes")) : null;
-        this.document = inits.isInitialized("document") ? new QDocument(forProperty("document")) : null;
+        this.snapshot = inits.isInitialized("snapshot") ? new QSnapshot(forProperty("snapshot"), inits.get("snapshot")) : null;
     }
 
 }

@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import uwna.knuwiki.controller.MemberJoinForm;
 
 @Entity
@@ -15,12 +14,11 @@ import uwna.knuwiki.controller.MemberJoinForm;
 @AllArgsConstructor
 public class Member extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "member_id")
-    private Long id;
+    private String id;
     private String username;
     private String password;
-    private String profileImageUrl;
     @Enumerated(EnumType.STRING)
     private Role role;
     @Enumerated(EnumType.STRING)
@@ -29,6 +27,7 @@ public class Member extends BaseEntity {
     public Member(MemberJoinForm joinForm) {
         this.username = joinForm.getUsername();
         this.password = joinForm.getPassword();
+        this.state = State.정상;
     }
 
 

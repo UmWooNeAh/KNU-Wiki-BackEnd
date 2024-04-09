@@ -1,4 +1,4 @@
-package uwna.knuwiki.entity;
+package uwna.knuwiki.persistence_entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -7,6 +7,8 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import uwna.knuwiki.entity.Document;
+import uwna.knuwiki.entity.DocumentType;
 
 
 /**

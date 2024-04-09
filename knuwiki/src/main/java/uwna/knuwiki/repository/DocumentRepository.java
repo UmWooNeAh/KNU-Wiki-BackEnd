@@ -1,7 +1,5 @@
 package uwna.knuwiki.repository;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import uwna.knuwiki.entity.QContent;
+import uwna.knuwiki.entity.QSnapshot;
 import uwna.knuwiki.paging.ArticlePage;
 import uwna.knuwiki.paging.PagingDto;
 import uwna.knuwiki.paging.QPagingDto;
@@ -20,7 +18,7 @@ import uwna.knuwiki.paging.QPagingDto;
 import java.util.List;
 import java.util.Optional;
 
-import static uwna.knuwiki.entity.QContent.*;
+import static uwna.knuwiki.entity.QSnapshot.*;
 import static uwna.knuwiki.entity.QDocument.*;
 
 
@@ -38,42 +36,41 @@ public class DocumentRepository {
 
     public Integer getDocCounts(String search) {
         return Optional.ofNullable(queryFactory
-                .select(content.count())
-                .from(content)
-                .join(content.document, document)
-                .where(content.name.contains(search).and(content.version.eq(document.nowVersion)))
+                .select(snapshot.count())
+                .from(snapshot)
+                .join(snapshot.document, document)
+                .where(snapshot.name.contains(search))
                 .fetchOne()).orElse(0L).intValue();
 
     }
 
-    public Page<PagingDto> findCurrentPageDocs(ArticlePage paging, Pageable pageable) {
-        List<PagingDto> content = queryFactory
-                .select(new QPagingDto(QContent.content.name,
-                        QContent.content.createdMember.username,
-                        QContent.content.texts
+    public List<PagingDto> findCurrentPageDocs(ArticlePage paging, String username) {
+        return queryFactory
+                .select(new QPagingDto(QSnapshot.snapshot.name,
+                        QSnapshot.snapshot.createdMember.username,
+                        QSnapshot.snapshot.texts
                 ))
-                .from(QContent.content)
-                .join(QContent.content.document, document)
-                .where(QContent.content.createdMember.username.eq("userA"))
+                .from(QSnapshot.snapshot)
+                .join(QSnapshot.snapshot.document, document)
+                .where(QSnapshot.snapshot.createdMember.username.eq(username))
                 .offset(paging.getOffset())
                 .limit(paging.getDocsPerPage())
                 .fetch();
-
-        return new PageImpl<>(content, pageable, content.size());
+        //return new PageImpl<>(snapshots, pageable, snapshots.size());
     }
 
-    public Page<PagingDto> findAllDocs(ArticlePage paging, Pageable pageable) {
-        List<PagingDto> contents = queryFactory
-                .select(new QPagingDto(content.name,
-                        content.createdMember.username,
-                        QContent.content.texts
+    public Page<PagingDto> findAllDocs(ArticlePage paging, Pageable pageable, String username) {
+        List<PagingDto> snapshots = queryFactory
+                .select(new QPagingDto(snapshot.name,
+                        snapshot.createdMember.username,
+                        QSnapshot.snapshot.texts
                 ))
-                .from(QContent.content)
-                .join(QContent.content.document, document)
-                .where(QContent.content.createdMember.username.eq("userA"))
+                .from(QSnapshot.snapshot)
+                .join(QSnapshot.snapshot.document, document)
+                .where(QSnapshot.snapshot.createdMember.username.eq(username))
                 .fetch();
 
-        return new PageImpl<>(contents, pageable, contents.size());
+        return new PageImpl<>(snapshots, pageable, snapshots.size());
 
     }
 

@@ -8,9 +8,9 @@ import java.util.Collection;
 
 public class MyUserDetail implements UserDetails {
 
-    private final User user;
+    private final SecurityUser user;
 
-    public MyUserDetail(User user) {
+    public MyUserDetail(SecurityUser user) {
         this.user = user;
     }
 

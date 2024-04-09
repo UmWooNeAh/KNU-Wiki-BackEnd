@@ -6,7 +6,7 @@ import uwna.knuwiki.entity.Member;
 import java.util.Optional;
 
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, String> {
 
     Optional<Member> findByUsername(String username);
 
